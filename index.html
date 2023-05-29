@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+
+<html lang="es-AR">
+	
+	<head> 
+		<meta charset="UTF-8"> 
+		<title>Challenge ONE Encriptador de Texto</title>
+		<link rel="stylesheet" href="reset.css">
+		<link rel="stylesheet" href="style.css">
+	</head>
+	
+	<body>
+		<div class="ventana_izquierda">
+			<div class="base_imágen_logotipo">
+				<img src="imágenes/logotipo.png" alt="Logotipo de Alura." class="imágen_logotipo">
+			</div>
+			<div class="base_texto_ingresado">
+				<textarea placeholder="Ingrese el texto aquí." class="texto_ingresado"></textarea>
+			</div>
+			<div class="base_imágen_instrucción">
+				<img src="imágenes/instrucción.png" alt="Imágen de instrucción." class="imágen_instrucción">
+			</div>
+			<div class="base_mensaje_instrucción">
+				<p class="mensaje_instrucción">Solo letras minúsculas y sin acentos.</p>
+			</div>
+			<div class="base_botón_encriptar">
+				<p class="botón_encriptar"><br>Encriptar</p>
+			</div>
+			<div class="base_botón_desencriptar">
+				<p class="botón_desencriptar"><br>Desencriptar</p>
+			</div>
+		</div>
+		
+		<div class="ventana_derecha">
+			<form>
+			<div class="ventana_trabajo">
+			</div>
+			<div class="base_texto_procesado">
+				<textarea readonly class="texto_procesado"></textarea>
+			</div>
+			<div class="base_imágen_muñeco">
+				<img src="imágenes/muñeco.png" alt="Imágen de muñeco." class="imágen_muñeco">
+			</div>
+			<div class="base_mensaje_estado">
+				<p class="mensaje_estado">Ningún mensaje fue encontrado.</p>
+			</div>
+			<div class="base_mensaje_guía">
+				<p class="mensaje_guía">Ingresa el texto que desees encriptar o desencriptar.</p>
+			</div>
+			<div class="base_botón_copiar">
+				<p class="botón_copiar"><br>Copiar</p>
+			</div>
+		</div>
+	</body>
+</html>
+
+<script>
+
+	botón_encriptar = document.querySelector(".botón_encriptar");
+	botón_encriptar.onclick = click_encriptar;
+	
+	botón_desencriptar = document.querySelector(".botón_desencriptar");
+	botón_desencriptar.onclick = click_desencriptar;
+	
+	botón_copiar = document.querySelector(".botón_copiar")
+	botón_copiar.onclick = click_copiar;
+	
+	function click_encriptar()
+	{
+		encriptar();
+	}
+	
+	function click_desencriptar()
+	{
+		desencriptar();
+	}
+	
+	function click_copiar()
+	{
+		copiar();
+	}
+	
+	function encriptar()
+	{
+		let texto = document.querySelector(".texto_ingresado").value;
+		let texto_modificado = "";
+		let a = 0;
+		let b = 0;
+		let lista = ["a", "e", "i", "o", "u"];
+		let lista_encriptada = ["ai", "enter", "imes", "ober", "ufat"];
+		
+		if (texto.length > 0)
+		{
+			for (a = 0; a < texto.length; a = a + 1)
+			{
+				for (b = 0; b < lista.length; b = b + 1)
+				{
+					if (texto[a] == lista[b])
+					{
+						texto_modificado = texto_modificado + lista_encriptada[b];
+						break
+					}
+					else
+					{
+						if (b == 4)
+						{
+							texto_modificado = texto_modificado + texto[a];
+						}
+					}
+				}
+			}
+			document.querySelector(".texto_procesado").value = texto_modificado;
+			con_datos();
+		}
+		else
+		{
+			document.querySelector(".texto_procesado").value = "";
+			sin_datos();
+		}
+		
+	}
+	
+	function desencriptar()
+	{
+		let texto = document.querySelector(".texto_ingresado").value;
+		let texto_modificado = "";
+		let a = 0;
+		let b = 0;
+		let lista = ["a", "e", "i", "o", "u"];
+		let lista_encriptada = ["ai", "enter", "imes", "ober", "ufat"];
+		
+		if (texto.length > 0)
+		{
+			for (a = 0; a < texto.length; a = a + 1)
+			{
+				for (b = 0; b < lista.length; b = b + 1)
+				{
+					if (texto[a] == lista[b])
+					{
+						if ((texto.length - (a + 1)) > lista_encriptada[b].length - 2)
+						{
+							if (texto.slice(a, a + (lista_encriptada[b].length)) == lista_encriptada[b])
+							{
+								texto_modificado = texto_modificado + lista[b];
+								a = a + (lista_encriptada[b].length - 1);
+								break;
+							}
+							else
+							{
+								texto_modificado = texto_modificado + texto[a];
+								break;
+							}
+						}
+						else
+						{
+							texto_modificado = texto_modificado + texto[a];
+							break;
+						}
+					}
+					else
+					{
+						if (b == 4)
+						{
+							texto_modificado = texto_modificado + texto[a];
+						}
+					}
+				}
+			}
+			document.querySelector(".texto_procesado").value = texto_modificado;
+			con_datos();
+		}
+		else
+		{
+			document.querySelector(".texto_procesado").value = "";
+			sin_datos();
+		}
+	}
+	
+	function copiar()
+	{
+		document.querySelector(".texto_procesado").select();
+		document.querySelector(".texto_procesado").setSelectionRange(0, 99999);
+		navigator.clipboard.writeText(document.querySelector(".texto_procesado").value);
+		<!-- alert("¡Copiado!"); -->
+	}
+	
+	function sin_datos()
+	{
+		document.querySelector(".base_imágen_muñeco").style.visibility = "visible";
+		document.querySelector(".imágen_muñeco").style.visibility = "visible";
+		document.querySelector(".base_mensaje_estado").style.visibility = "visible";
+		document.querySelector(".mensaje_estado").style.visibility = "visible";
+		document.querySelector(".base_mensaje_guía").style.visibility = "visible";
+		document.querySelector(".mensaje_guía").style.visibility = "visible";
+		document.querySelector(".base_botón_copiar").style.visibility = "hidden";
+		document.querySelector(".botón_copiar").style.visibility = "hidden";
+	}
+	
+	function con_datos()
+	{
+		document.querySelector(".base_imágen_muñeco").style.visibility = "hidden";
+		document.querySelector(".imágen_muñeco").style.visibility = "hidden";
+		document.querySelector(".base_mensaje_estado").style.visibility = "hidden";
+		document.querySelector(".mensaje_estado").style.visibility = "hidden";
+		document.querySelector(".base_mensaje_guía").style.visibility = "hidden";
+		document.querySelector(".mensaje_guía").style.visibility = "hidden";
+		document.querySelector(".base_botón_copiar").style.visibility = "visible";
+		document.querySelector(".botón_copiar").style.visibility = "visible";
+	}
+	
+</script>
